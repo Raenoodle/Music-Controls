@@ -9,13 +9,13 @@
       "author": "dariussbezy <908767091522420817> (https://github.com/dariussbezy \"GitHub\")",
       "icon": "MusicIcon",
       "channels": {
-        "latest": "1.1.1"
+        "latest": "1.1.2"
       },
       "versions": {
-        "1.1.1": {
-          "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.1.1.zip",
-          "sha256": "de734146ff86d8db891fe4b6195776254b073b12ceb980c93e554cc62fc11201",
-          "size": 26045,
+        "1.1.2": {
+          "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.1.2.zip",
+          "sha256": "98eb871a34096ef24f1d09a788cb11c23409b739298f255d9044a4c31e5e8f21",
+          "size": 26480,
           "dependencies": {
             "valenced.api": {
               "version": ">=1 <2"
