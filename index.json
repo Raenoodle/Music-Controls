@@ -1,0 +1,33 @@
+{
+  "format": 1,
+  "name": "Music Controls",
+  "description": "Control Spotify, YouTube Music and SoundCloud from a player above the YouBar. Spotify works on Android and iOS; YouTube Music and SoundCloud need the Music Controls app on Android.",
+  "plugins": {
+    "dariuss.music-controls": {
+      "name": "Music Controls",
+      "description": "Control Spotify, YouTube Music and SoundCloud from a player above the YouBar. Spotify works on Android and iOS; YouTube Music and SoundCloud need the Music Controls app on Android.",
+      "author": "dariussbezy <908767091522420817> (https://github.com/dariussbezy \"GitHub\")",
+      "icon": "MusicIcon",
+      "channels": {
+        "latest": "1.0.0"
+      },
+      "versions": {
+        "1.0.0": {
+          "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.0.0.zip",
+          "sha256": "370e06380c486b9bb5e1f258cc1e592a4109ec48ac8378240795afec6e4a471b",
+          "size": 24168,
+          "dependencies": {
+            "valenced.api": {
+              "version": ">=1 <2"
+            },
+            "discord": {}
+          }
+        }
+      },
+      "contributors": [
+        "coder.gg <1099039269391171765> (https://il1ll.github.io \"Website\") (https://github.com/il1ll \"GitHub\")",
+        "kmmiio99o <879393496627306587>"
+      ]
+    }
+  }
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Only apps signed with this app's key can hold this, and the Music Controls receiver in Discord
+        only accepts broadcasts from a holder, so no other app can feed Discord a fake song.
+    -->
+    <permission
+        android:name="dev.dariuss.musicbridge.permission.SEND_STATE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="dev.dariuss.musicbridge.permission.SEND_STATE" />
+
+    <!-- Lets this app address Discord on Android 11+, so what is playing goes to Discord only. -->
+    <queries>
+        <package android:name="app.valenced" />
+        <package android:name="com.discord" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Music Controls">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Reads media sessions once the user grants notification access. -->
+        <service
+            android:name=".MediaListener"
+            android:exported="true"
+            android:label="Music Controls"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- Keeps the app out of the cached state while a player is active, without a notification. -->
+        <service
+            android:name=".KeepAlive"
+            android:exported="false" />
+    </application>
+</manifest>
