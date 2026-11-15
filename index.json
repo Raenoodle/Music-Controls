@@ -9,13 +9,13 @@
       "author": "dariussbezy <908767091522420817> (https://github.com/dariussbezy \"GitHub\")",
       "icon": "MusicIcon",
       "channels": {
-        "latest": "1.1.0"
+        "latest": "1.1.1"
       },
       "versions": {
-        "1.1.0": {
-          "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.1.0.zip",
-          "sha256": "68976d2b8a63b5e932b57dcf2b66d1329d03c4c93319722c6162bd4e4b9562dc",
-          "size": 25553,
+        "1.1.1": {
+          "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.1.1.zip",
+          "sha256": "de734146ff86d8db891fe4b6195776254b073b12ceb980c93e554cc62fc11201",
+          "size": 26045,
           "dependencies": {
             "valenced.api": {
               "version": ">=1 <2"
@@ -23,11 +23,7 @@
             "discord": {}
           }
         }
-      },
-      "contributors": [
-        "coder.gg <1099039269391171765> (https://il1ll.github.io \"Website\") (https://github.com/il1ll \"GitHub\")",
-        "kmmiio99o.dev <879393496627306587>"
-      ]
+      }
     }
   }
 }
