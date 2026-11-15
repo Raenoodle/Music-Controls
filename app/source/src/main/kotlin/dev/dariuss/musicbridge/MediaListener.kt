@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.service.notification.NotificationListenerService
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -107,6 +108,17 @@ class MediaListener : NotificationListenerService() {
 
     fun refresh() {
         val list = runCatching { sessions?.getActiveSessions(component) }.getOrNull().orEmpty()
+        if (Log.isLoggable("MusicControls", Log.DEBUG)) {
+            for (c in list) {
+                val m = c.metadata
+                Log.d(
+                    "MusicControls",
+                    "session ${c.packageName}: bitmap=${m?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null || m?.getBitmap(MediaMetadata.METADATA_KEY_ART) != null} " +
+                        "albumArtUri=${m?.getString(MediaMetadata.METADATA_KEY_ALBUM_ART_URI)} artUri=${m?.getString(MediaMetadata.METADATA_KEY_ART_URI)} " +
+                        "iconUri=${m?.getString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI)} mediaId=${m?.getString(MediaMetadata.METADATA_KEY_MEDIA_ID)} mediaUri=${m?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI)}",
+                )
+            }
+        }
         pick(list)
     }
 
@@ -264,6 +276,9 @@ class MediaListener : NotificationListenerService() {
      * Bitmaps are compressed here; content URIs are read off the main thread; web URLs are passed on.
      */
     private fun updateArt(metadata: MediaMetadata?, key: String) {
+        if (Log.isLoggable("MusicControls", Log.DEBUG)) {
+            Log.d("MusicControls", "art for $key: bitmap=${metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null} uri=${metadata?.getString(MediaMetadata.METADATA_KEY_ALBUM_ART_URI)}")
+        }
         val bitmap = metadata?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
             ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART)
             ?: metadata?.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON)
@@ -282,15 +297,21 @@ class MediaListener : NotificationListenerService() {
             ?: return
         if (uri == artSource) return
         artSource = uri
-        if (uri.startsWith("http://") || uri.startsWith("https://")) {
-            artUrl = uri
+        val web = webUrlOf(uri)
+        if (web != null) {
+            artUrl = web
             artVersion++
             return
         }
         artLoader.execute {
             val bytes = runCatching {
                 contentResolver.openInputStream(Uri.parse(uri))?.use(BitmapFactory::decodeStream)
-            }.getOrNull()?.let(::compress) ?: return@execute
+            }.getOrNull()?.let(::compress)
+            if (bytes == null) {
+                // Try again on the next update instead of keeping the song without a cover.
+                handler.post { if (artSource == uri) artSource = null }
+                return@execute
+            }
             handler.post {
                 if (artKey != key) return@post
                 art = bytes
@@ -298,6 +319,20 @@ class MediaListener : NotificationListenerService() {
                 broadcast()
             }
         }
+    }
+
+    /**
+     * A web address for the cover when the player has one. SoundCloud wraps its covers in its own
+     * image provider (content://com.soundcloud.android.imageProvider/artworks-….png?_HOST_=i1.sndcdn.com&_PROTOCOL_=https),
+     * which downloads on demand and sometimes fails, so the real address is rebuilt from it.
+     */
+    private fun webUrlOf(uri: String): String? {
+        if (uri.startsWith("http://") || uri.startsWith("https://")) return uri
+        val parsed = runCatching { Uri.parse(uri.replace("&amp;", "&")) }.getOrNull() ?: return null
+        val host = runCatching { parsed.getQueryParameter("_HOST_") }.getOrNull() ?: return null
+        val protocol = runCatching { parsed.getQueryParameter("_PROTOCOL_") }.getOrNull() ?: "https"
+        val path = parsed.encodedPath ?: return null
+        return "$protocol://$host$path"
     }
 
     /** Sends to each Discord install only, behind the signature permission. */

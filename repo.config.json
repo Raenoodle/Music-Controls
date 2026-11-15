@@ -3,7 +3,7 @@
   "description": "Control Spotify, YouTube Music and SoundCloud from a player above the YouBar. Spotify works on Android and iOS; YouTube Music and SoundCloud need the Music Controls app on Android.",
   "channels": {
     "dariuss.music-controls": {
-      "latest": "1.0.1"
+      "latest": "1.1.0"
     }
   }
 }

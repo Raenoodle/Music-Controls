@@ -1,6 +1,7 @@
 package dev.dariuss.musicbridge
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
@@ -12,6 +13,16 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+
+/** Huawei and Honor close background apps unless they are set to be managed manually. */
+private val HUAWEI = Build.MANUFACTURER.lowercase().let { it.contains("huawei") || it.contains("honor") }
+
+/** Their app launch screens, newest first; the names differ between EMUI, MagicOS and older versions. */
+private val HUAWEI_SCREENS = listOf(
+    "com.huawei.systemmanager" to "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity",
+    "com.hihonor.systemmanager" to "com.hihonor.systemmanager.startupmgr.ui.StartupNormalAppListActivity",
+    "com.huawei.systemmanager" to "com.huawei.systemmanager.optimize.process.ProtectActivity",
+)
 
 /** One screen: whether notification access is on, and shortcuts to the settings it needs. */
 class MainActivity : Activity() {
@@ -83,7 +94,46 @@ class MainActivity : Activity() {
             }
             startActivity(intent)
         })
+        if (HUAWEI) {
+            column.addView(button("Huawei background setup") { showHuaweiSetup() })
+        }
         setContentView(ScrollView(this).apply { addView(column) })
+
+        // Shown once on Huawei and Honor; the button above opens it again.
+        val prefs = getSharedPreferences("setup", MODE_PRIVATE)
+        if (HUAWEI && !prefs.getBoolean("huaweiShown", false)) {
+            prefs.edit().putBoolean("huaweiShown", true).apply()
+            showHuaweiSetup()
+        }
+    }
+
+    private fun showHuaweiSetup() {
+        AlertDialog.Builder(this)
+            .setTitle("Huawei background setup")
+            .setMessage(
+                "1. Open Settings > Battery > App launch. If it is not there, check Settings > Apps > App launch.\n\n" +
+                    "2. Turn off Manage automatically for Music Controls, then choose Manage manually.\n\n" +
+                    "3. Turn on Auto-launch, Secondary launch and Run in background.\n\n" +
+                    "On older EMUI versions, also open Settings > Advanced settings > Battery manager > " +
+                    "Protected apps and turn on Music Controls. Menu names vary, and this app cannot check " +
+                    "Huawei's switches.",
+            )
+            .setNegativeButton("Close", null)
+            .setPositiveButton("Open settings") { _, _ -> openHuaweiLaunchSettings() }
+            .show()
+    }
+
+    /** The first app launch screen this phone has, or the app's own settings page. */
+    private fun openHuaweiLaunchSettings() {
+        for ((pkg, cls) in HUAWEI_SCREENS) {
+            val opened = runCatching {
+                startActivity(Intent().setComponent(ComponentName(pkg, cls)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }.isSuccess
+            if (opened) return
+        }
+        runCatching {
+            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
+        }
     }
 
     override fun onResume() {
