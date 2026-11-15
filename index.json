@@ -14,8 +14,8 @@
       "versions": {
         "1.0.0": {
           "url": "https://raw.githubusercontent.com/dariussbezy/Music-Controls/main/pool/dariuss.music-controls@1.0.0.zip",
-          "sha256": "370e06380c486b9bb5e1f258cc1e592a4109ec48ac8378240795afec6e4a471b",
-          "size": 24168,
+          "sha256": "cac8f983670ddd4759ad280398e6b06964e8b46277693169d51996f4956cb68a",
+          "size": 24174,
           "dependencies": {
             "valenced.api": {
               "version": ">=1 <2"
@@ -26,7 +26,7 @@
       },
       "contributors": [
         "coder.gg <1099039269391171765> (https://il1ll.github.io \"Website\") (https://github.com/il1ll \"GitHub\")",
-        "kmmiio99o <879393496627306587>"
+        "kmmiio99o.dev <879393496627306587>"
       ]
     }
   }

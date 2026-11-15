@@ -35,4 +35,4 @@ Shuffle and repeat work on YouTube Music. SoundCloud does not share them with ot
 - `plugins/MC`: the plugin (TypeScript, plus a small Kotlin part for Android).
 - `app/source`: the app (Kotlin). Build with `./gradlew assembleRelease`; release signing reads `keystore.properties`, which is not in the repository.
 
-Credits: dariussbezy, with [coder.gg](https://github.com/il1ll) and kmmiio99o.
+Credits: dariussbezy, with [coder.gg](https://github.com/il1ll) and kmmiio99o.dev.
