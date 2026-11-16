@@ -28,7 +28,9 @@ Only needed for **YouTube Music and SoundCloud** on **Android**. It is not for i
 
 The app reads media sessions only. It does not read or keep your notifications, has no internet access, and sends what is playing only to Discord, behind a signature permission. Android 7 or newer, any phone.
 
-**Listening status** (optional): turn it on in the plugin settings to show Listening to YouTube Music or SoundCloud on your profile, with the song, artist, cover and time. Covers YouTube Music does not share are looked up by title and artist on Deezer and Apple's iTunes; when none is found, the app's logo is shown. Modded builds such as ReVanced or RVX and YouTube Music clients like Metrolist or InnerTune work too; if the status does not show, **Diagnostics → Listening status** says why.
+**Listening status** (optional): turn it on in the plugin settings to show Listening to YouTube Music or SoundCloud on your profile, with the song, artist, cover and time. Covers YouTube Music does not share are looked up by title and artist on Deezer and Apple's iTunes; when none is found, the app's logo is shown. Modded builds such as ReVanced or RVX and YouTube Music clients like Metrolist or InnerTune work too. If the status does not show, make sure Listening status is on and that you are not Invisible.
+
+**Transparent look**: the player can be transparent, with Low, Medium or High transparency in the plugin settings. Together with the Transparent YOUBAR plugin it reads as one piece with the YouBar.
 
 Shuffle and repeat work on YouTube Music. SoundCloud does not share them with other apps, so their buttons are hidden while it plays.
 
